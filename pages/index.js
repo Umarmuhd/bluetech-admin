@@ -1,5 +1,8 @@
+import { withPublic } from "lib/routes";
 import Head from "next/head";
 
-export default function Home() {
+function Home({}) {
   return <div>Hello world</div>;
 }
+
+export default withPublic(Home);

@@ -39,20 +39,31 @@ const Provider = ({ children }) => {
     setError(error);
   };
 
-  const signup = async ({ email, password }) => {};
+  const signup = async ({ email, password }) => {
+    const { error, user } = await AuthService.signUpWithEmailPassword({
+      email,
+      password,
+    });
+    setUser(user ?? null);
+    setError(error);
+  };
 
   const logout = async () => {
     await AuthService.logout();
     setUser(null);
   };
 
-  return (
-    <AuthContext.Provider
-      value={{ user, setUser, error, loginWithGoogle, login, logout }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const values = {
+    user,
+    setUser,
+    error,
+    loginWithGoogle,
+    login,
+    signup,
+    logout,
+  };
+
+  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, Provider };

@@ -152,14 +152,14 @@ export default function Login() {
                   </div>
                   <div className="flex flex-wrap mt-6">
                     <div className="w-1/2">
-                      <Link href="/forgot-password">
+                      <Link href="/auth/forgot-password">
                         <a>
                           <small>Forgot password?</small>
                         </a>
                       </Link>
                     </div>
                     <div className="w-1/2 text-right">
-                      <Link href="/signup">
+                      <Link href="/auth/signup">
                         <a>
                           <small>Create new account</small>
                         </a>

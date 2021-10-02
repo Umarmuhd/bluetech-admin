@@ -1,121 +1,170 @@
-import { useRef, useContext, useEffect } from "react";
+import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
+import { useState, useContext, useEffect } from "react";
 
 //context
 import { AuthContext } from "@/context/AuthContext";
-// import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 // layout for page
 import Auth from "@/layouts/Auth";
 
 export default function Signup() {
-  const nameRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   //state
-  //   const { user, signup, error } = useContext(AuthContext);
+  const { error, loginWithGoogle, signup } = useContext(AuthContext);
 
-  //   useEffect(() => error && toast.error(error));
+  useEffect(() => error && toast.error(error));
 
-  //router
-  const router = useRouter();
-
-  //   if (user) router.push("/");
-
-  const handleRegister = async (event) => {
+  const handleSignup = async (event) => {
     event.preventDefault();
 
-    // signup({
-    //   name: nameRef.current.value,
-    //   email: emailRef.current.value,
-    //   password: passwordRef.current.value,
-    // });
+    try {
+      setLoading(true);
+      signup({ email, password });
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
   };
 
   return (
     <>
-      <div className="h-full">
-        <div className="h-screen signup grid place-content-center bg-greyBg">
-          <div className="flex justify-between mx-auto w-full md:w-md py-10 bg-white shadow px-10">
-            <div className="left mr-10 md:flex items-center hidden">
-              <img src="/images/image.png" alt="login" className="w-60" />
-            </div>
-            <form className="right" onSubmit={handleRegister}>
-              <h1 className="text-3xl font-bold mb-5 font-head">
-                Create your Free Account
-              </h1>
-              <div className="mb-6">
-                <label
-                  htmlFor="name"
-                  className="text-sm font-medium text-gray-900 block mb-2"
-                >
-                  Your Name
-                </label>
+      <Head>
+        <title>Signup - Bookey</title>
+        <meta charSet="utf-8" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <>
+        <div className="text-gray-800 antialiased h-full">
+          <section className="pt-11 md:pt-18 w-full h-full bg-secondary">
+            <div className="container mx-auto px-4 h-full">
+              <div className="flex content-center items-center justify-center h-full md:pb-14">
+                <div className="w-full lg:w-4/12 px-4 ">
+                  <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border">
+                    <div className="rounded-t mb-0 px-6 py-6">
+                      <div className="btn-wrapper text-center">
+                        <button
+                          className="bg-white active:bg-gray-100 text-gray-800 px-4 py-2 rounded outline-none focus:outline-none w-full mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-semibold text-xs justify-center"
+                          type="button"
+                          style={{ transition: "all 0.15s ease 0s" }}
+                          onClick={() => loginWithGoogle()}
+                        >
+                          <img
+                            alt="..."
+                            className="w-5 mr-1"
+                            src="/icons/socials/google.svg"
+                          />
+                          Signup with Google
+                        </button>
+                      </div>
+                      <hr className="mt-6 border-b-1 border-gray-400" />
+                    </div>
+                    <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
+                      <div className="text-gray-500 text-center mb-3 font-bold">
+                        <small>Or signup with credentials</small>
+                      </div>
+                      <form onSubmit={handleSignup}>
+                        <div className="relative w-full mb-3">
+                          <label
+                            className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                            htmlFor="name"
+                          >
+                            Full name
+                          </label>
+                          <input
+                            type="text"
+                            className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
+                            placeholder="Full name"
+                            style={{ transition: "all 0.15s ease 0s" }}
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                        </div>
 
-                <input
-                  type="name"
-                  name="name"
-                  id="name"
-                  ref={nameRef}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full p-2.5 focus:outline-none focus:ring"
-                  placeholder="John Snow"
-                  required
-                />
+                        <div className="relative w-full mb-3">
+                          <label
+                            className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                            htmlFor="email"
+                          >
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
+                            placeholder="Email"
+                            aria-describedby="emailHelp"
+                            style={{ transition: "all 0.15s ease 0s" }}
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            autoComplete="current-email"
+                          />
+                        </div>
+                        <div className="relative w-full mb-3">
+                          <label
+                            className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                            htmlFor="password"
+                          >
+                            Password
+                          </label>
+                          <input
+                            type="password"
+                            className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
+                            placeholder="Password"
+                            style={{ transition: "all 0.15s ease 0s" }}
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="current-password"
+                          />
+                        </div>
+
+                        <div className="text-center">
+                          <button
+                            className="bg-blue-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                            type="submit"
+                            // disabled={!(validateForm() && loader)}
+                            disabled={loading}
+                            style={{
+                              transition: "all 0.15s ease 0s",
+                              background: loading ? "#ccc" : null,
+                            }}
+                          >
+                            Signup
+                          </button>
+                        </div>
+                      </form>
+                      {error && <p>The username or password already exist</p>}
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap mt-6">
+                    <div className="w-1/2">
+                      <a>
+                        <small>Already got an account ?</small>
+                      </a>
+                    </div>
+                    <div className="w-1/2 text-right">
+                      <Link href="/auth/login">
+                        <a>
+                          <small>Login here</small>
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="mb-6">
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-900 block mb-2"
-                >
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  ref={emailRef}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full p-2.5 focus:outline-none focus:ring"
-                  placeholder="example@email.com"
-                  required
-                />
-              </div>
-              <div className="mb-6">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-gray-900 block mb-2"
-                >
-                  Your password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  ref={passwordRef}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full p-2.5 focus:outline-none focus:ring"
-                  placeholder="At least 6 characters"
-                  required
-                />
-              </div>
-              <div className="text-center mb-2">
-                <button
-                  type="submit"
-                  className="w-full bg-primary text-white py-3 rounded"
-                >
-                  Create account
-                </button>
-              </div>
-              <div className="no_already flex text-sm">
-                <p className="mr-1">Already have an account?</p>
-                <Link href="/auth/login">
-                  <a>Login</a>
-                </Link>
-              </div>
-            </form>
-          </div>
+            </div>
+          </section>
         </div>
-      </div>
+      </>
     </>
   );
 }

@@ -29,9 +29,17 @@ export const AuthService = {
       console.error(error);
     }
   },
-  signUpWithEmailPassword: async ({ name, email, password }) => {
+  signUpWithEmailPassword: async ({ email, password }) => {
     try {
-    } catch (error) {}
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      return { user: userCred.user };
+    } catch (error) {
+      console.error(error);
+    }
   },
   logout: async () => {
     await signOut(auth);
